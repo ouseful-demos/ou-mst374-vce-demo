@@ -1,0 +1,37 @@
+
+paths:
+  
+    
+  
+    
+  
+    
+  
+    
+  - source: /etc/module-content/data/./content
+    target: /home/ou/MST374-23J/./content
+    overwrite: never
+    
+  
+    
+  - source: /etc/module-content/data/~/.jupyter
+    target: /home/ou/MST374-23J/~/.jupyter
+    overwrite: never
+    
+  
+    
+  - source: /etc/module-content/data/.jupyter/custom
+    target: /home/ou/MST374-23J/.jupyter/custom
+    overwrite: always
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+
+

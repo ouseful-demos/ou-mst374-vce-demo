@@ -1,0 +1,123 @@
+# CONFIG FILE FOR A *** CLASSIC JUPYTER NOTEBOOK *** ENVIRONMENT
+
+# NOTE THAT THE CONFIG FILES EXPLICITLY REFER TO THE PRESENTATION CODE
+# UPDATING IMAGES FOR OTHER MODEULS / PRESENTATIONS WILL REQUIRE
+# THE FOLLOWING CONFIG FILES TO BE UPDATED:
+# - ContainerConfig.yaml
+
+module:
+  code: MST374
+  presentation: 23J
+# This gives a home directory of: /home/ou/TM351-23J
+# MAINTENANCE: set path in local_db_path.sh
+packs:
+  - name: nbclassic
+
+server:
+  access_token: MST374-23J
+  wrapper_host: "*.open.ac.uk"
+  default_path: /tree
+
+image:
+  base: ubuntu:22.04
+
+hacks:
+  - nbclassic-fullbrand
+  
+content:
+  # Python package requirements
+  - source: ./requirements-cnb.txt
+    target: /tmp/requirements-cnb.txt
+    overwrite: always
+  - source: ./requirements-jlv4.txt
+    target: /tmp/requirements-jlv4.txt
+    overwrite: always
+  - source: ./requirements.txt
+    target: /tmp/requirements.txt
+    overwrite: always
+  # Bundled notebooks
+  - source: ./content
+    target: ./content
+    overwrite: never
+  # Jupyter config
+  - source: ./.jupyter
+    target: ~/.jupyter
+    overwrite: never
+
+#environment:
+#  - name: PATH
+#    value: /var/openrefine:${PATH}:/home/ou/TM351-23J/.local/bin
+
+
+packages:
+  apt:
+    - wget
+    - python3-pip
+    - zip
+    - unzip
+    - git
+    - texlive-xetex
+    - texlive-fonts-recommended
+    - texlive-latex-extra 
+    - texlive-pictures
+    - texlive-plain-generic
+    - pandoc
+    - pandoc-citeproc
+    - pandoc-data
+    - imagemagick
+
+
+scripts:
+  build:
+
+    - commands: |
+        python3 -m pip install --upgrade pip
+        pip install --upgrade git+https://github.com/ouseful-PR/nbval.git@table-test
+        pip install pytest-html
+
+    - commands: |
+        pip install -r /tmp/requirements-cnb.txt
+        pip install -r /tmp/requirements-jlv4.txt
+        pip install -r /tmp/requirements.txt
+
+    - commands: |
+        pip install --upgrade --no-deps git+https://github.com/mwaskom/seaborn.git
+        pip install git+https://github.com/innovationOUtside/ipython_magic_tikz.git
+
+    - commands: |
+        jupyter nbclassic-serverextension enable --py --system nbzip
+        jupyter nbclassic-extension install --py --system nbzip
+        jupyter nbclassic-extension enable --py --system nbzip
+    - commands: |
+        jupyter nbclassic-extension install --py --system jupyter_nbextensions_configurator
+        jupyter nbclassic-extension enable --py --system jupyter_nbextensions_configurator
+        jupyter nbclassic-serverextension enable --py --system jupyter_nbextensions_configurator
+        jupyter nbclassic-extension install --py --system jupyter_contrib_nbextensions
+        jupyter nbclassic-extension enable --system spellchecker/main
+        jupyter nbclassic-extension enable --system collapsible_headings/main
+        jupyter nbclassic-extension enable --system skip-traceback/main
+        jupyter nbclassic-extension enable --system codefolding/main
+        jupyter nbclassic-extension enable --system highlighter/highlighter
+    - commands: |
+        git clone https://github.com/uclixnjupyternbaccessibility/accessibility_toolbar.git
+        jupyter nbclassic-extension install accessibility_toolbar
+        rm -rf accessibility_toolbar
+
+#    - commands: |
+#        tlmgr init-usertree
+#        tlmgr update --self --all
+#        tlmgr install xcolor
+  
+    - commands: |
+        VERSION="${MODULE_CODE}_${MODULE_PRESENTATION}_0.01"
+        DATE=`date +%Y-%m-%d/%H:%M.%S`
+        mkdir -p /etc/ouseful
+        echo "Version: ${VERSION} - build time: ${DATE}." > /etc/ouseful/.container_version
+        chmod ugo+r /etc/ouseful/.container_version
+
+#  startup:
+#    - commands: |
+#        sudo /etc/ou_local_db_path/local_db_path.sh
+#services:
+#  - postgresql
+#  - mongod

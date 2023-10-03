@@ -1,0 +1,9 @@
+pandoc
+numpy
+matplotlib
+pandas
+scipy
+sympy
+
+# Py packages in MST374: https://learn2.open.ac.uk/mod/forumng/discuss.php?d=4425328&p=p30408848#p30408848
+# Docker informal: https://learn2.open.ac.uk/mod/forumng/discuss.php?d=4425908#p30410000

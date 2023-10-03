@@ -1,0 +1,7 @@
+# Base environment
+jupyterlab==4.0.5
+notebook==7.0.2
+
+# TM351 JupyterLab extensions
+#ou-tm351-jl-extensions==0.1.2 #JL 3
+ou-tm351-jl-extensions==0.2.2 #JL 4
